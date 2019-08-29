@@ -1,6 +1,6 @@
 class ProductStockService
     def get_stock_from_seller_sku
-      @stock = PrincipiaService.new.last_update_of_stock_from_seller_sku
+      @stock = PrincipiaService.new.seller_sku
     end
 
     def get_seller_sku

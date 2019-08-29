@@ -30,6 +30,7 @@ group :development, :test do
   gem 'rest-client'
   gem 'rubocop'
   gem 'jsonapi-rails'
+  gem 'pg'
 end
 
 group :test do
