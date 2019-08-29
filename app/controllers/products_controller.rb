@@ -21,20 +21,24 @@ class ProductsController < ApplicationController
 
   end
 =end
-  def update
-    @products = ProductService.new.get_products
+  def update_by_seller_sku
+    message = ProductService.new.update_by_seller_sku
+    render json: { data: message }
 
+=begin
     @products["data"].each do |p|
       p["children"].each do |c|
         @product = Product.where(seller_sku: p["seller_sku"])
       
         if @product.update(old_quantity: c[:quantity], current_quantity: c[:quantity])
-          render json: { data: @product, message: 'Produto atualizado!' }, status: :ok
+          #render json: { data: @product, message: 'Produto atualizado!' }, status: :ok
         else
-          render json: { status: 422, message: 'Produto não atualizado', data: @product.errors }, status: :unprocessable_entity
+          #render json: { status: 422, message: 'Produto não atualizado', data: @product.errors }, status: :unprocessable_entity
         end
       end
     end
+=end
+    #rescue ActiveRecord::RecordNotFound => e render json: { error: e.to_s }, status: :not_found
   end
 
   def product_id
