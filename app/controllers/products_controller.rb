@@ -3,50 +3,20 @@ class ProductsController < ApplicationController
     @products = ProductService.new.get_products
     render json: { data: @products }, status: :ok
   end
-=begin
-  def update
-    #@products = ProductService.new.get_products.to_a
-    @product = ProductService.find_by_seller_sku(params[:product])
-    if @product.update(product_params)
-      render json: { data: @product, message: 'Produto atualizado!' }, status: :created
-    else
-      render json: { status: 422, message: 'Produto não atualizado', data: @product.errors },
-      status: :unprocessable_entity
-    end
-     
-    #render json: { data:  Product.where(seller_sku: 1)}
-    #@product = Product.where(p['id'])
-    #render json: { data: @products[0][1][0]["name"]}
-    #render json: { data: @products[0][1][0]["id"] }
 
-  end
-=end
   def update_by_seller_sku
     message = ProductService.new.update_by_seller_sku
-    render json: { data: message }
-
-=begin
-    @products["data"].each do |p|
-      p["children"].each do |c|
-        @product = Product.where(seller_sku: p["seller_sku"])
-      
-        if @product.update(old_quantity: c[:quantity], current_quantity: c[:quantity])
-          #render json: { data: @product, message: 'Produto atualizado!' }, status: :ok
-        else
-          #render json: { status: 422, message: 'Produto não atualizado', data: @product.errors }, status: :unprocessable_entity
-        end
-      end
-    end
-=end
-    #rescue ActiveRecord::RecordNotFound => e render json: { error: e.to_s }, status: :not_found
-  end
-
-  def product_id
-    @product = Product.find(params[:id])
+    render json: { data: message }, status: :ok #ver depois status
   end
 
   def find_by_seller_sku
     @product = ProductService.new.find_by_seller_sku(params[:seller_sku])
+    render json: { data: @product }, status: :ok
+  end
+
+  def get_products_to_compare
+    @products = ProductService.new.get_products_to_update
+    render json: { data: @products }
   end
 
   private

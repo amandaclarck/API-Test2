@@ -20,9 +20,9 @@ class ProductService
   end
 
   def update_by_seller_sku
-    @products = get_products
+    @get_products_to_update = get_products_to_update
     message = []
-    @products["data"].each do |p|
+    @get_products_to_update["data"].each do |p|
       p["children"].each do |c|
         @products = Product.where(seller_sku: c["seller_sku"])
         @products.each do |product|
@@ -36,5 +36,19 @@ class ProductService
       end
     end
     message
+  end
+
+  def get_products_to_update
+    @products_api = get_products
+    products = []
+    @products_api["data"].each do |p|
+      p["children"].each do |c|
+        @products = Product.where.not(current_quantity: c["quantity"]).where(seller_sku: c["seller_sku"])
+        @products.each do |product|
+          products << product
+        end
+      end
+    end
+    products
   end
 end
