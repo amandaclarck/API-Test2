@@ -29,7 +29,6 @@ class ProductService
   end
 
   def update_by_seller_sku(products_to_update)
-    #@products_to_update = get_products_to_update
     message = []
     products_to_update["data"].each do |p|
       p["children"].each do |c|
@@ -52,18 +51,14 @@ class ProductService
     products = []
     @products_api["data"].each do |p|
       p["children"].each do |c|
-        @products = Product.where.not(current_quantity: 1).where(seller_sku: c["seller_sku"])
+        @products = Product.where.not(current_quantity: p["quantity"]).where(seller_sku: c["seller_sku"])
         @products.each do |product|
           products << product
         end
       end
     end
-    #update_by_seller_sku(products)
     products
   end
-
-  #chamar no job para atualizar meu bd -> get_products
-  #depois chamar no job para atualizar o ecommerce -> get_products_to_update
 
   def update_product_stock_ecommerce
     products = get_products_to_update
