@@ -6,23 +6,32 @@ class ProductService
       @stock_name           = 'CD'
       @url_erp              = 'https://api-platforms.e-principia.com.br/v1/'
       @ecommerce_token      = 'et9OmPl2QaRTbBMChkzraA=='
-      @url_ecommerce        = 'http://store.api.achieveleap.com/skus/'
+      @url_ecommerce        = 'http://store.api.achieveleap.com/api/v1/skus/'
   end
 
+  def headers
+    {
+      key: "Authorization",
+      value: "Token token=\"et9OmPl2QaRTbBMChkzraA==\"",
+      content_type: "application/json"
+    }
+
+  end
+ 
   def get_products
-    products = RestClient.get(@url_erp + '/products', headers= {A1_TOKEN: 'UXdy+MhMhvgUly7v0nVonA=='})
+    products = RestClient.get(@url_erp + '/products', headers= {A1_TOKEN: @token})
     products_array = JSON.parse(products)
   end
 
   def find_by_seller_sku(seller_sku)
-    product = RestClient.get(@url_erp + '/products/' + seller_sku, headers= {A1_TOKEN: 'UXdy+MhMhvgUly7v0nVonA=='})
+    product = RestClient.get(@url_erp + '/products/' + seller_sku, headers= {A1_TOKEN: @token})
     product = JSON.parse(product)
   end
 
-  def update_by_seller_sku
-    @get_products_to_update = get_products_to_update
+  def update_by_seller_sku(products_to_update)
+    #@products_to_update = get_products_to_update
     message = []
-    @get_products_to_update["data"].each do |p|
+    products_to_update["data"].each do |p|
       p["children"].each do |c|
         @products = Product.where(seller_sku: c["seller_sku"])
         @products.each do |product|
@@ -43,12 +52,27 @@ class ProductService
     products = []
     @products_api["data"].each do |p|
       p["children"].each do |c|
-        @products = Product.where.not(current_quantity: c["quantity"]).where(seller_sku: c["seller_sku"])
+        @products = Product.where.not(current_quantity: 1).where(seller_sku: c["seller_sku"])
         @products.each do |product|
           products << product
         end
       end
     end
+    #update_by_seller_sku(products)
     products
+  end
+
+  #chamar no job para atualizar meu bd -> get_products
+  #depois chamar no job para atualizar o ecommerce -> get_products_to_update
+
+  def update_product_stock_ecommerce
+    products = get_products_to_update
+
+    products.each do |product|
+      body =  { product: { quantity: product["current_quantity"] } }
+      url = @url_ecommerce + product["seller_sku"].to_s + "?stock_name=" + @stock_name
+
+      response = RestClient.put url, body, {content_type: "application/json", authorization: "Token token=\"et9OmPl2QaRTbBMChkzraA==\""}
+    end
   end
 end

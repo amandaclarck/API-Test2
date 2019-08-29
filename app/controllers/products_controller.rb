@@ -18,4 +18,9 @@ class ProductsController < ApplicationController
     @products = ProductService.new.get_products_to_update
     render json: { data: @products }
   end
+
+  def update_product_stock_ecommerce
+    @products = ProductService.new.update_product_stock_ecommerce
+    render json: { data: @products }
+  end
 end
