@@ -18,17 +18,4 @@ class ProductsController < ApplicationController
     @products = ProductService.new.get_products_to_update
     render json: { data: @products }
   end
-
-  private
-  def product_params
-    params.require(:product).permit(:seller_sku, :old_quantity, :current_quantity)
-  end
-
-  def product_current_quantity
-    params.require(:product).permit(:seller_sku, :current_quantity)
-  end
-
-  def product_old_quantity
-    params.require(:product).permit(:seller_sku, :old_quantity)
-  end
 end
