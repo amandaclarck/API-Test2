@@ -9,15 +9,6 @@ class ProductService
       @url_ecommerce        = 'http://store.api.achieveleap.com/api/v1/skus/'
   end
 
-  def headers
-    {
-      key: "Authorization",
-      value: "Token token=\"et9OmPl2QaRTbBMChkzraA==\"",
-      content_type: "application/json"
-    }
-
-  end
- 
   def get_products
     products = RestClient.get(@url_erp + '/products', headers= {A1_TOKEN: @token})
     products_array = JSON.parse(products)
