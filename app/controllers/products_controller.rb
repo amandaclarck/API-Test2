@@ -16,11 +16,16 @@ class ProductsController < ApplicationController
 
   def get_products_to_compare
     @products = ProductService.new.get_products_to_update
-    render json: { data: @products }
+    render json: { data: @products }, status: :ok
   end
 
   def update_product_stock_ecommerce
     @products = ProductService.new.update_product_stock_ecommerce
-    render json: { data: @products }
+    render json: { data: @products }, status: :ok
+  end
+
+  def update_local_db
+    @products = ProductService.new.update_local_db
+    render json: { data: @products }, status: :ok
   end
 end

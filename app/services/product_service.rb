@@ -70,4 +70,8 @@ class ProductService
       response = RestClient.put url, body, {content_type: "application/json", authorization: "Token token=\"et9OmPl2QaRTbBMChkzraA==\""}
     end
   end
+
+  def update_local_db
+    update_by_seller_sku(get_products)
+  end
 end
