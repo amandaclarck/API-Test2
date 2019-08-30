@@ -12,14 +12,14 @@ default: &default
 development:
   <<: *default
   host: <%= ENV["DB_HOST"]%>
-  username: principia
+  username: <%= ENV["DB_USER"]%>
   password: <%= ENV["DB_PASS"]%>
   database: principia_dev
 
 test:
   <<: *default
   database: principia_test
-  username: principia
+  username: <%= ENV["DB_PASS"]%>
   password: <%= ENV["DB_PASS"]%>
   database: principia_test
 
