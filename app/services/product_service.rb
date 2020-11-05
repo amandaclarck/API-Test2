@@ -2,10 +2,10 @@ class ProductService
   attr_accessor :token, :seller_sku, :stock_name, :url_erp, :ecommerce_token, :url_ecommerce
 
   def initialize
-      @token                = 'UXdy+MhMhvgUly7v0nVonA==' #erp
+      @token                = ENV['ERP_TOKEN'] #erp
       @stock_name           = 'CD'
       @url_erp              = 'https://api-platforms.e-principia.com.br/v1/'
-      @ecommerce_token      = 'et9OmPl2QaRTbBMChkzraA=='
+      @ecommerce_token      = ENV['TOKEN']
       @url_ecommerce        = 'http://store.api.achieveleap.com/api/v1/skus/'
   end
 
